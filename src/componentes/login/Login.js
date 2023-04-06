@@ -8,28 +8,30 @@ const LoginScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
-
     axios.post('http://127.0.0.1:8000/api/login', {
       username: username,
       password: password
     })
-  .then(resposta => {
-      navigation.navigate('Index'); 
-  
-  })
-  .catch(erro => {
-    setErrorMessage(erro.response.data.error)
-  });
+    .then(resposta => { 
+      navigation.navigate('Index');    
+      localStorage.setItem('token', resposta.data.token);
+      localStorage.setItem('userId', resposta.data.id);
 
+      
+   })
+    .catch(erro => {
+      setErrorMessage(erro.response.data.error)
+    });
   };
+
   return (
     <View>
-      <TextInput
-        placeholder="Nome de usuário"
+      <Text>Usuário:</Text>
+      <TextInput 
         onChangeText={text => setUsername(text)}
       />
+      <Text>Senha:</Text>
       <TextInput
-        placeholder="Senha"
         secureTextEntry={true}
         onChangeText={text => setPassword(text)}
       />
@@ -37,6 +39,7 @@ const LoginScreen = ({ navigation }) => {
       {errorMessage !== '' && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
     </View>
   );
+
 };
 
 export default LoginScreen;

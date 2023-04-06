@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { View,TextInput,Text, TouchableOpacity } from 'react-native';
-
+import axios from 'axios';
 const IndexScreen = ({ navigation }) => {
 
   const [name, setName] = useState('');
+  const [notas, setNotas] = useState('');
   const [latitude, setLatitude] = useState(0.00);
   const [longitude, setLogitude] = useState(0.00);
   const [pluviosidadeMaxAnualDia, setPluviosidadeMaxAnualDia] = useState(0.00);
@@ -12,8 +13,28 @@ const IndexScreen = ({ navigation }) => {
   const [maiorCotaMicroBacia, setMaiorCotaMicroBacia] = useState(0.00);
   const [menorCotaMicroBacia, setMenorCotaMicroBacia] = useState(0.00);
   const [talvegue, setTalvegue] = useState(0.00);
-
+  
+  const userId = localStorage.getItem('userId');
   const handlePress = () => {
+    
+    axios.post('http://127.0.0.1:8000/api/user/'+ userId +'/barraginha', {
+      name: name,
+      nota:notas,
+      latitude: latitude,
+      longitude: longitude,
+      pluviosidadeMaxAnualDia: pluviosidadeMaxAnualDia,
+      areaMicroBacia: areaMicroBacia,
+      maiorCotaMicroBacia: maiorCotaMicroBacia,
+      menorCotaMicroBacia: menorCotaMicroBacia,
+      talvegue: talvegue
+      
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     
   };
   return (
@@ -25,6 +46,14 @@ const IndexScreen = ({ navigation }) => {
         <TextInput
           value={name}
           onChangeText={setName}
+        />
+      </View>
+      <View>
+        <Text>Notas:</Text>
+        <TextInput
+          value={notas}
+          onChangeText={setNotas}
+          
         />
       </View>
       <View>
