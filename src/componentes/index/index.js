@@ -30,7 +30,15 @@ const IndexScreen = ({ navigation }) => {
       
     })
     .then(function (response) {
-      console.log(response);
+      setName('');
+      setNotas('');
+      setLatitude(0.00);
+      setLogitude(0.00);
+      setPluviosidadeMaxAnualDia(0.00);
+      setAreaMicroBacia(0.00);
+      setMaiorCotaMicroBacia(0.00);
+      setMenorCotaMicroBacia(0.00);
+      setTalvegue(0.00);
     })
     .catch(function (error) {
       console.log(error);
