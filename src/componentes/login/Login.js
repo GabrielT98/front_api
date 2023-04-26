@@ -1,45 +1,113 @@
 import React, { useState } from 'react';
-import { View, TextInput,Text, Button ,AsyncStorage} from 'react-native';
+import { View, TextInput, Text, Button ,AsyncStorage, StyleSheet} from 'react-native';
 import axios from 'axios';
+import { AntDesign } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
+  navigation.setOptions({ headerShown: false });
+  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
-    axios.post('http://127.0.0.1:8000/api/login', {
+    await axios.post('http://104.248.125.130:8080/api/login', {
       username: username,
       password: password
     })
     .then(resposta => { 
       navigation.navigate('Index');    
-      localStorage.setItem('token', resposta.data.token);
-      localStorage.setItem('userId', resposta.data.id);
-
-      
+      AsyncStorage.setItem('token', resposta.data.token);
+      AsyncStorage.setItem('userId', resposta.data.id);
+    
    })
     .catch(erro => {
+
       setErrorMessage(erro.response.data.error)
     });
   };
 
   return (
-    <View>
-      <Text>Usuário:</Text>
-      <TextInput 
-        onChangeText={text => setUsername(text)}
-      />
-      <Text>Senha:</Text>
-      <TextInput
-        secureTextEntry={true}
-        onChangeText={text => setPassword(text)}
-      />
-      <Button title="Login" onPress={handleLogin} />
-      {errorMessage !== '' && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <AntDesign name="user" size={64} color="#fff" />
+        <Text style={styles.title}>Faça login</Text>
+      </View>
+      <View style={styles.form}>
+        <Text style={styles.label}>Usuário:</Text>
+        <View style={styles.inputContainer}>
+          <AntDesign name="user" size={24} color="#ccc" style={styles.inputIcon} />
+          <TextInput 
+            style={styles.input}
+            onChangeText={text => setUsername(text)}
+          />
+        </View>
+        <Text style={styles.label}>Senha:</Text>
+        <View style={styles.inputContainer}>
+          <AntDesign name="lock" size={24} color="#ccc" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            onChangeText={text => setPassword(text)}
+          />
+        </View>
+        <Button title="Login" onPress={handleLogin} />
+        {errorMessage !== '' && <Text style={styles.error}>{errorMessage}</Text>}
+      </View>
     </View>
   );
 
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#007AFF',
+  },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    color: '#fff',
+    fontSize: 24,
+    marginTop: 10,
+  },
+  form: {
+    flex: 2,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  label: {
+    marginTop: 20,
+    marginBottom: 5,
+    color: '#333',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    marginLeft: 10,
+  },
+  inputIcon: {
+    marginRight: 10,
+  },
+  error: {
+    color: 'red',
+    marginTop: 10,
+  },
+});
 
 export default LoginScreen;
