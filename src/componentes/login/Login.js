@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, Button ,AsyncStorage, StyleSheet} from 'react-native';
+import { View, TextInput, Text, Button , StyleSheet} from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
@@ -18,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
     .then(resposta => { 
       navigation.navigate('Index');    
       AsyncStorage.setItem('token', resposta.data.token);
-      AsyncStorage.setItem('userId', resposta.data.id);
+      AsyncStorage.setItem('userId', String(resposta.data.id));
     
    })
     .catch(erro => {

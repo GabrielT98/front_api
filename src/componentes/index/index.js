@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View,TextInput,Text, TouchableOpacity, FlatList ,StyleSheet,localAStorage} from 'react-native';
+import { View,TextInput,Text, TouchableOpacity, FlatList ,StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
 const IndexScreen = ({ navigation }) => {
@@ -17,6 +18,9 @@ const IndexScreen = ({ navigation }) => {
   const [barraginhas, setBarraginhas] = useState([]);
 
   useEffect( async () => {
+
+
+      const userId = await AsyncStorage.getItem('userId') 
       await axios.get('http://104.248.125.130:8080/api/user/'+ userId +'/barraginha')
       .then(response => {
         setBarraginhas(response.data);
@@ -38,8 +42,9 @@ const IndexScreen = ({ navigation }) => {
     );
   }, []);
 
-  const userId = localStorage.getItem('userId');
+
   const handlePress = async () => {
+    const userId = await AsyncStorage.getItem('userId') 
     
     await axios.post('http://104.248.125.130:8080/api/user/'+ userId +'/barraginha', {
       name: name,
