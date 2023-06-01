@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, Button , StyleSheet} from 'react-native';
+import { View, TextInput, Text, Button , StyleSheet, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
   navigation.setOptions({ headerShown: false });
-  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -16,16 +15,18 @@ const LoginScreen = ({ navigation }) => {
       username: username,
       password: password
     })
-    .then(resposta => { 
-      navigation.navigate('Index');    
+    .then(resposta => {     
       AsyncStorage.setItem('token', resposta.data.token);
       AsyncStorage.setItem('userId', String(resposta.data.id));
-    
+      navigation.navigate('Index');
    })
     .catch(erro => {
-
       setErrorMessage(erro.response.data.error)
     });
+  };
+
+  const handleCadastrarUsuario = () => {
+    navigation.navigate('CadastrarUsuario'); 
   };
 
   return (
@@ -54,7 +55,11 @@ const LoginScreen = ({ navigation }) => {
         </View>
         <Button title="Login" onPress={handleLogin} />
         {errorMessage !== '' && <Text style={styles.error}>{errorMessage}</Text>}
+        <TouchableOpacity onPress={handleCadastrarUsuario} style={styles.linkButton}>
+          <Text style={styles.linkText}>Novo Usuário? Cadastre-se</Text>
+        </TouchableOpacity>
       </View>
+      
     </View>
   );
 
@@ -108,6 +113,14 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginTop: 10,
+  },
+  linkButton: {
+    alignItems: 'center',
+    marginTop:10,
+  },
+  linkText: {
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
 });
 

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "frontapp",
-    "slug": "frontapp",
+    "name": "Minhas Barraginhas",
+    "slug": "minhas_barraginhas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/pngwing.com.png",
@@ -9,7 +9,9 @@
     "splash": {
       "image": "./assets/pngwing.com.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "width":100,
+      "height":100
     },
     "assetBundlePatterns": [
       "**/*"
